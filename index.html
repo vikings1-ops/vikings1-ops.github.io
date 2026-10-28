@@ -82,18 +82,16 @@
     </div>
 
     <script>
-        // Real code content database hardcoded securely to prevent any browser blocking errors
+        // Exact matching key names map directly to what is defined in the click triggers above
         const databaseLog = {
-            // --- CHIP-732 SQL SCRIPTS ---
             CHIP732_Week06_SQL1_lab1: `/* CHIP732_Week06_SQL1_lab1.sql \n   Healthcare Relational Database System Initialization */\n\nSELECT patient_id, encounter_id, admission_source\nFROM clinical_encounters\nWHERE medical_record_status = 'Active'\nORDER BY admission_date DESC;`,
             
-            CHIP732_Week06_SQL1_lab2: `/* CHIP732_Week06_SQL1_lab2.sql \n   Clinical Workflow Data Joins */\n\nSELECT p.patient_id, p.last_name, e.encounter_date, lab.glucose_value\nFROM patient_demographics p\nINNER JOIN encounters e ON p.patient_id = e.patient_id\nLEFT JOIN lab_results lab ON e.encounter_id = lab.encounter_id\nWHERE lab.test_type = 'Glucose'\nORDER BY e.encounter_date;`,
+            CHIP732_Week06_SQL1_lab2: `/* CHIP732_Week06_SQL1_lab2.sql \n   Clinical Workflow Data Joins */\n\nSELECT p.patient_id, p.last_name, e.encounter_date, lab.glucose_value\nFROM patient_demographics p\nINNER JOIN encounters e ON p.patient_id = p.patient_id\nLEFT JOIN lab_results lab ON e.encounter_id = lab.encounter_id\nWHERE lab.test_type = 'Glucose'\nORDER BY e.encounter_date;`,
             
             CHIP732_Week06_SQL2_lab3: `/* CHIP732_Week06_SQL2_lab3.sql \n   Unit Operations Aggregations and Metrics */\n\nSELECT department_id, COUNT(encounter_id) AS total_admissions, AVG(length_of_stay) AS avg_days\nFROM inpatient_movements\nGROUP BY department_id\nHAVING COUNT(encounter_id) > 5;`,
             
             CHIP732_Week08_SQL3_lab4: `/* CHIP732_Week08_SQL3_lab4.sql \n   Advanced Diagnostic Coding Index Query Mapping */\n\nSELECT diagnosis_code, count(*) as code_frequency\nFROM billing_diagnoses\nWHERE system_origin = 'Epic'\nGROUP BY diagnosis_code;`,
 
-            // --- CHIP-705 PYTHON SCRIPTS ---
             bagel_count_731059404: `# bagel_count_731059404.py\n# Operational unit snack distribution log framework\n\ndef calculate_bagel_allocation(staff_count, shift_type):\n    print(f"Processing alignment for {staff_count} clinical workers...")\n    if shift_type == "Night":\n        return staff_count * 2\n    return staff_count * 1.5\n\ntotal = calculate_bagel_allocation(12, "Night")\nprint(f"Total bagels required: {total}")`,
             
             fight_song_731059404: `# fight_song_731059404.py\n# Technical string parsing script\n\ndef sing_fight_song():\n    lyrics = ["I'm a Tar Heel born,", "I'm a Tar Heel bred,", "And when I die, I'm a Tar Heel dead!"]\n    for line in lyrics:\n        print(line.upper())\n\nsing_fight_song()`,
@@ -120,3 +118,5 @@
         function viewLocalCode(fileKey, element) {
             document.querySelectorAll('.lab-item').forEach(item => item.classList.remove('active'));
             element.classList.add('active');
+
+            // Format displayed title extensions accurately matching file types
