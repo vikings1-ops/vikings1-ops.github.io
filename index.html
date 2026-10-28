@@ -1,142 +1,863 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Informatics Technical Portfolio</title>
+    <title>Health Informatics & Data Analytics Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#111827',
+                            900: '#0f172a',
+                            950: '#030712',
+                        },
+                        accent: {
+                            indigo: '#6366f1',
+                            cyan: '#38bdf8',
+                            emerald: '#34d399',
+                            amber: '#fbbf24',
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'JetBrains Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f6f9; color: #333; line-height: 1.6; }
-        header { background: #1e293b; color: white; padding: 2rem 5% 1rem 5%; text-align: left; }
-        header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; }
-        header p { color: #94a3b8; font-size: 1rem; margin-bottom: 1.5rem; }
-        
-        .tabs { display: flex; gap: 1rem; border-bottom: 1px solid #334155; }
-        .tab-btn { background: #334155; color: #94a3b8; border: none; padding: 0.75rem 1.5rem; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: all 0.2s ease; }
-        .tab-btn:hover { background: #475569; color: white; }
-        .tab-btn.active { background: #3b82f6; color: white; }
-
-        .container { display: flex; max-width: 1400px; margin: 2rem auto; padding: 0 2%; gap: 2rem; }
-        .sidebar { flex: 1; min-width: 320px; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); height: fit-content; }
-        .sidebar h2 { font-size: 1.2rem; margin-bottom: 1rem; color: #0f172a; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; }
-        .lab-list { list-style: none; display: none; }
-        .lab-list.active { display: block; }
-        .lab-item { padding: 0.75rem 1rem; margin-bottom: 0.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: #475569; transition: all 0.2s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .lab-item:hover { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
-        .lab-item.active { background: #3b82f6; color: white; border-color: #2563eb; }
-        
-        .workspace { flex: 2.5; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); display: flex; flex-direction: column; min-height: 550px; }
-        .workspace-header { margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem; }
-        .workspace-header h2 { color: #0f172a; font-size: 1.3rem; }
-        .status-tag { display: inline-block; background: #dbeafe; color: #1e40af; font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
-        
-        .code-container { flex: 1; background: #ffffff; border-radius: 6px; overflow: hidden; border: 1px solid #e2e8f0; }
-        .gist-wrapper { display: none; }
-        .gist-wrapper.active { display: block; }
-        .loading { display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-style: italic; padding: 4rem 0; }
-        
-        /* Adjust layout parameters for embedded Gist wrappers */
-        .gist .gist-file { margin-bottom: 0 !important; border: none !important; }
-        .gist .gist-data { max-height: 550px !important; overflow-y: auto !important; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        pre, code {
+            font-family: 'Fira Code', monospace;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        /* Code Syntax Colors */
+        .token-keyword { color: #f472b6; font-weight: 600; }
+        .token-function { color: #38bdf8; }
+        .token-string { color: #a7f3d0; }
+        .token-comment { color: #64748b; font-style: italic; }
+        .token-number { color: #fbbf24; }
+        .token-operator { color: #c084fc; }
+        .token-variable { color: #e2e8f0; }
+        .token-sql-keyword { color: #818cf8; font-weight: 700; }
+        .token-sql-fn { color: #38bdf8; font-weight: 600; }
     </style>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col md:flex-row antialiased selection:bg-indigo-500 selection:text-white">
 
-    <header>
-        <h1>Health Informatics Technical Portfolio</h1>
-        <p>Live development files spanning database queries and healthcare application logic.</p>
-        
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchCourse('CHIP-732', this)">SQL Database Systems (CHIP-732)</button>
-            <button class="tab-btn" onclick="switchCourse('CHIP-705', this)">Python for Healthcare (CHIP-705)</button>
-        </div>
-    </header>
-
-    <div class="container">
-        <!-- Sidebar Menu Navigation links mapping exactly to your embedded Gist IDs -->
-        <div class="sidebar">
-            <h2 id="sidebar-title">CHIP-732 Scripts</h2>
-            
-            <!-- SQL Files List (Matches raw files inside your SQL gist folder package) -->
-            <ul id="menu-CHIP-732" class="lab-list active">
-                <li class="lab-item" onclick="viewGistFile('CHIP-732', 'file-lab1-sql', 'lab1.sql', this)">📄 lab1.sql</li>
-                <li class="lab-item" onclick="viewGistFile('CHIP-732', 'file-lab2-sql', 'lab2.sql', this)">📄 lab2.sql</li>
-                <li class="lab-item" onclick="viewGistFile('CHIP-732', 'file-lab3-sql', 'lab3.sql', this)">📄 lab3.sql</li>
-                <li class="lab-item" onclick="viewGistFile('CHIP-732', 'file-lab4-sql', 'lab4.sql', this)">📄 lab4.sql</li>
-            </ul>
-
-            <!-- Python Files List (Matches raw files inside your Python gist folder package) -->
-            <ul id="menu-CHIP-705" class="lab-list">
-                <li class="lab-item" onclick="viewGistFile('CHIP-705', 'file-bagel_count_gcarrill-py', 'bagel_count_gcarrill.py', this)">🐍 bagel_count_gcarrill.py</li>
-                <li class="lab-item" onclick="viewGistFile('CHIP-705', 'file-fight_song_gcarrillo-py', 'fight_song_gcarrillo.py', this)">🐍 fight_song_gcarrillo.py</li>
-                <li class="lab-item" onclick="viewGistFile('CHIP-705', 'file-gcarrill_ckd_screening-py', 'gcarrill_ckd_screening.py', this)">🐍 gcarrill_ckd_screening.py</li>
-                <li class="lab-item" onclick="viewGistFile('CHIP-705', 'file-library_of_babel_gcarrill-py', 'library_of_babel_gcarrill.py', this)">🐍 library_of_babel_gcarrill.py</li>
-            </ul>
-        </div>
-
-        <!-- Workspace Code Viewer Content Panel -->
-        <div class="workspace">
-            <div class="workspace-header">
-                <h2 id="active-title">Select an Assignment File</h2>
-                <span id="active-status" class="status-tag">Active Repo: CHIP-732</span>
-            </div>
-            <div class="code-container">
-                <!-- Landing Screen Hint Info block -->
-                <div id="welcome-message" class="loading">
-                    Click an assignment script from the sidebar list to view the codebase text natively.
-                </div>
-
-                <!-- SQL Gist Sandbox Container Block -->
-                <div id="gist-container-CHIP-732" class="gist-wrapper">
-                    <script src="https://github.com"></script>
-                </div>
-
-                <!-- Python Gist Sandbox Container Block -->
-                <div id="gist-container-CHIP-705" class="gist-wrapper">
-                    <script src="https://github.com"></script>
-                </div>
-            </div>
-        </div>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 ease-in-out bg-slate-800 border border-slate-700 text-slate-200 px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 pointer-events-none">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toast-message" class="text-sm font-medium">Notification message</span>
     </div>
 
+    <!-- Mobile Top Navigation Header -->
+    <header class="md:hidden bg-slate-950 border-b border-slate-800 p-4 sticky top-0 z-30 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold">
+                <i data-lucide="activity" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-sm text-slate-100">Health Informatics</h1>
+                <p class="text-xs text-slate-400">Data Analytics & Pipeline Architecture</p>
+            </div>
+        </div>
+        <button id="mobile-menu-btn" class="p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white focus:outline-none">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="hidden md:flex flex-col w-full md:w-80 bg-slate-950/80 backdrop-blur-md border-r border-slate-800/80 p-6 fixed md:sticky top-0 h-auto md:h-screen z-40 overflow-y-auto">
+        <!-- Profile Header -->
+        <div class="flex items-center space-x-3.5 mb-8 pb-6 border-b border-slate-800/80">
+            <div class="relative">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+                    <i data-lucide="heart-pulse" class="w-6 h-6"></i>
+                </div>
+                <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-950 rounded-full"></span>
+            </div>
+            <div>
+                <h2 class="font-bold text-base text-slate-100 tracking-tight">Health Data Portfolio</h2>
+                <span class="inline-flex items-center text-xs font-medium text-indigo-400 bg-indigo-950/60 border border-indigo-800/50 px-2 py-0.5 rounded-full mt-1">
+                    <i data-lucide="database" class="w-3 h-3 mr-1"></i> EHR & SQL Specialist
+                </span>
+            </div>
+        </div>
+
+        <!-- Quick Summary Stats -->
+        <div class="grid grid-cols-2 gap-2 mb-6">
+            <div class="bg-slate-900/90 border border-slate-800/80 p-3 rounded-xl">
+                <span class="text-xs text-slate-400 block mb-1">Domain</span>
+                <span class="text-xs font-semibold text-slate-200">Clinical Informatics</span>
+            </div>
+            <div class="bg-slate-900/90 border border-slate-800/80 p-3 rounded-xl">
+                <span class="text-xs text-slate-400 block mb-1">Focus</span>
+                <span class="text-xs font-semibold text-slate-200">EHR SQL & Python</span>
+            </div>
+        </div>
+
+        <!-- Category Navigation -->
+        <div class="mb-8">
+            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-2">Project Categories</h3>
+            <nav class="space-y-1">
+                <button onclick="filterCategory('all')" id="cat-btn-all" class="cat-btn active w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all bg-indigo-600/10 text-indigo-400 border border-indigo-500/30">
+                    <span class="flex items-center"><i data-lucide="layers" class="w-4 h-4 mr-2.5"></i> All Projects</span>
+                    <span id="count-all" class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">4</span>
+                </button>
+                <button onclick="filterCategory('sql')" id="cat-btn-sql" class="cat-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent transition-all">
+                    <span class="flex items-center"><i data-lucide="database" class="w-4 h-4 mr-2.5 text-indigo-400"></i> SQL & Health Data</span>
+                    <span id="count-sql" class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">1</span>
+                </button>
+                <button onclick="filterCategory('python')" id="cat-btn-python" class="cat-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent transition-all">
+                    <span class="flex items-center"><i data-lucide="code-2" class="w-4 h-4 mr-2.5 text-cyan-400"></i> Python & Automation</span>
+                    <span id="count-python" class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">3</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Tech Skills Filter Badges -->
+        <div class="mb-8">
+            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-2">Technologies & Tags</h3>
+            <div class="flex flex-wrap gap-1.5">
+                <button onclick="toggleTagFilter('CKD-EPI')" class="tag-badge text-xs px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition">#CKD-EPI</button>
+                <button onclick="toggleTagFilter('SQLite')" class="tag-badge text-xs px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition">#SQLite</button>
+                <button onclick="toggleTagFilter('EHR Schema')" class="tag-badge text-xs px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition">#EHR Schema</button>
+                <button onclick="toggleTagFilter('CSV/JSON Data')" class="tag-badge text-xs px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition">#CSV/JSON Data</button>
+                <button onclick="toggleTagFilter('Algorithmic')" class="tag-badge text-xs px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition">#Algorithmic</button>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="mt-auto pt-6 border-t border-slate-800/80 text-xs text-slate-500 flex flex-col space-y-2">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+                <span>HIPAA-Compliant Synthetic Analytics</span>
+            </div>
+            <p class="text-[11px] text-slate-600">Built with Tailwind & Vanilla JS. Hosted via GitHub Pages.</p>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full overflow-hidden">
+        
+        <!-- Top Search and Banner Header -->
+        <div class="mb-8 bg-slate-950/60 border border-slate-800 p-6 rounded-2xl relative overflow-hidden backdrop-blur-md">
+            <div class="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-1/3 -mb-12 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <div class="inline-flex items-center space-x-2 text-xs font-semibold px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>Clinical Data & Systems Portfolio</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-slate-100 tracking-tight">Healthcare Analytics & SQL Workspaces</h1>
+                    <p class="text-slate-400 text-sm mt-1 max-w-2xl">
+                        A curated showcase of clinical informatics algorithms, relational EHR SQL schema queries, automated screening scripts, and algorithmic data modeling.
+                    </p>
+                </div>
+
+                <!-- Search Input Bar -->
+                <div class="w-full md:w-72 relative">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="search-input" placeholder="Search algorithms, SQL, labs..." 
+                        class="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition shadow-inner">
+                    <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Filter Indicator Bar -->
+        <div id="filter-indicator" class="hidden mb-6 flex items-center justify-between bg-slate-800/40 border border-slate-700/50 px-4 py-2.5 rounded-xl text-xs text-slate-300">
+            <span class="flex items-center">
+                <i data-lucide="filter" class="w-3.5 h-3.5 mr-2 text-indigo-400"></i>
+                <span>Active Filter: <strong id="filter-label" class="text-indigo-300">All</strong></span>
+            </span>
+            <button onclick="resetFilters()" class="text-slate-400 hover:text-white flex items-center text-xs">
+                Reset Filters <i data-lucide="rotate-ccw" class="w-3 h-3 ml-1"></i>
+            </button>
+        </div>
+
+        <!-- Projects Grid Container -->
+        <div id="projects-container" class="space-y-8">
+
+            <!-- PROJECT 1: CKD Screening & eGFR Calculator -->
+            <article class="project-card bg-slate-950/70 border border-slate-800 rounded-2xl overflow-hidden shadow-xl transition hover:border-slate-700" data-category="python" data-tags="CKD-EPI,Python,EHR,CSV/JSON Data">
+                <div class="p-6">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                                <i data-lucide="activity" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-100">CKD Screening & eGFR Calculator</h3>
+                                <p class="text-xs text-indigo-400 font-mono mt-0.5">gcarrill_ckd_screening.py • Healthcare Data Pipeline</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-cyan-950/80 text-cyan-300 border border-cyan-800/60">Python 3</span>
+                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-800/60">2021 CKD-EPI</span>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-300 text-sm leading-relaxed mb-5">
+                        Automated clinical screening workflow parsing patient demographics CSV and Comprehensive Metabolic Panel (CMP) lab JSON data to calculate 2021 CKD-EPI eGFR scores and isolate high-risk renal patients (<code class="text-amber-300 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">eGFR &le; 65</code>) for targeted care management.
+                    </p>
+
+                    <!-- Features Highlight -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 text-xs">
+                        <div class="bg-slate-900/80 border border-slate-800/80 p-3 rounded-xl flex items-start space-x-2">
+                            <i data-lucide="file-spreadsheet" class="w-4 h-4 text-cyan-400 mt-0.5 shrink-0"></i>
+                            <div>
+                                <strong class="text-slate-200 block mb-0.5">Dual Ingestion</strong>
+                                <span class="text-slate-400">Reads patient CSV + lab CMP JSON</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900/80 border border-slate-800/80 p-3 rounded-xl flex items-start space-x-2">
+                            <i data-lucide="calculator" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                            <div>
+                                <strong class="text-slate-200 block mb-0.5">2021 CKD-EPI Eq</strong>
+                                <span class="text-slate-400">Race-free serum creatinine eGFR</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900/80 border border-slate-800/80 p-3 rounded-xl flex items-start space-x-2">
+                            <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 mt-0.5 shrink-0"></i>
+                            <div>
+                                <strong class="text-slate-200 block mb-0.5">Risk Isolation</strong>
+                                <span class="text-slate-400">Exports high-risk cohort to results.csv</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Code Viewer Panel -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                        <div class="bg-slate-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                                <span class="text-slate-400 ml-2 font-mono">gcarrill_ckd_screening.py</span>
+                            </div>
+                            <button onclick="copyCode('code-ckd')" class="flex items-center space-x-1 text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700/60 transition">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span>Copy Code</span>
+                            </button>
+                        </div>
+                        <div class="p-4 overflow-x-auto max-h-96 text-xs font-mono">
+<pre id="code-ckd"><code class="language-python"><span class="token-keyword">import</span> csv
+<span class="token-keyword">import</span> json
+
+<span class="token-comment"># 1. Read patient demographics from CSV file</span>
+demographics = []
+<span class="token-keyword">with</span> <span class="token-function">open</span>(<span class="token-string">'patient_demographics.csv'</span>, mode=<span class="token-string">'r'</span>, encoding=<span class="token-string">'utf-8'</span>) <span class="token-keyword">as</span> file:
+    reader = csv.DictReader(file)
+    <span class="token-keyword">for</span> row <span class="token-keyword">in</span> reader:
+        demographics.append(row)
+
+<span class="token-comment"># 2. Read CMP lab results JSON data</span>
+<span class="token-keyword">with</span> <span class="token-function">open</span>(<span class="token-string">'cmp.json'</span>, mode=<span class="token-string">'r'</span>, encoding=<span class="token-string">'utf-8'</span>) <span class="token-keyword">as</span> file:
+    cmp_data = json.load(file)
+
+screening_results = []
+
+<span class="token-comment"># 3. Calculate eGFR using 2021 CKD-EPI Equation</span>
+<span class="token-keyword">for</span> patient <span class="token-keyword">in</span> demographics:
+    patient_id = patient[<span class="token-string">'patient_id'</span>]
+    sex = patient[<span class="token-string">'sex'</span>]
+    age = <span class="token-function">float</span>(patient[<span class="token-string">'age'</span>])
+    full_name = f<span class="token-string">"{patient['first_name']} {patient['last_name']}"</span>
+    
+    <span class="token-keyword">if</span> patient_id <span class="token-keyword">in</span> cmp_data:
+        panels = cmp_data[patient_id]
+        serum_creatinine = <span class="token-keyword">None</span>
+        
+        <span class="token-keyword">for</span> panel <span class="token-keyword">in</span> panels:
+            <span class="token-keyword">if</span> panel[<span class="token-string">'measure'</span>] == <span class="token-string">'Creatinine'</span>:
+                serum_creatinine = <span class="token-function">float</span>(panel[<span class="token-string">'patient_measure'</span>])
+                <span class="token-keyword">break</span>
+                
+        <span class="token-keyword">if</span> serum_creatinine <span class="token-keyword">is not None</span>:
+            c = <span class="token-number">142</span>
+            k = <span class="token-number">0.7</span> <span class="token-keyword">if</span> sex == <span class="token-string">'F'</span> <span class="token-keyword">else</span> <span class="token-number">0.9</span>
+            a = -<span class="token-number">0.241</span> <span class="token-keyword">if</span> sex == <span class="token-string">'F'</span> <span class="token-keyword">else</span> -<span class="token-number">0.302</span>
+                
+            scr_k = serum_creatinine / k
+            low = <span class="token-function">min</span>(scr_k, <span class="token-number">1.0</span>)
+            high = <span class="token-function">max</span>(scr_k, <span class="token-number">1.0</span>)
+            
+            <span class="token-comment"># 2021 CKD-EPI formula execution</span>
+            egfr = c * (low ** a) * (high ** -<span class="token-number">1.200</span>) * (<span class="token-number">0.9938</span> ** age)
+            <span class="token-keyword">if</span> sex == <span class="token-string">'F'</span>:
+                egfr *= <span class="token-number">1.012</span>
+                
+            <span class="token-comment"># Isolate patients with high risk eGFR <= 65</span>
+            <span class="token-keyword">if</span> egfr &lt;= <span class="token-number">65</span>:
+                screening_results.append({
+                    <span class="token-string">'patient_id'</span>: patient_id,
+                    <span class="token-string">'patient_name'</span>: full_name,
+                    <span class="token-string">'mobile_phone'</span>: patient[<span class="token-string">'mobile_number'</span>],
+                    <span class="token-string">'eGFR'</span>: <span class="token-function">round</span>(egfr, <span class="token-number">2</span>)
+                })
+
+<span class="token-comment"># Output high-risk cohort to results.csv</span>
+<span class="token-keyword">print</span>(f<span class="token-string">"Screening complete! {len(screening_results)} patients identified."</span>)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- PROJECT 2: Clinical Database Management & Relational Schema (SQL) -->
+            <article class="project-card bg-slate-950/70 border border-slate-800 rounded-2xl overflow-hidden shadow-xl transition hover:border-slate-700" data-category="sql" data-tags="SQLite,EHR Schema,SQL,JOINs,CRUD">
+                <div class="p-6">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                                <i data-lucide="database" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-100">Clinical EHR Database Management & Relational SQL</h3>
+                                <p class="text-xs text-indigo-400 font-mono mt-0.5">CHIP732 SQL Lab Series • SQLite EHR Architecture</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-indigo-950/80 text-indigo-300 border border-indigo-800/60">SQLite / Relational SQL</span>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-300 text-sm leading-relaxed mb-5">
+                        Multi-part clinical SQL repository covering relational EHR schema creation, CRUD operations, foreign key mappings across patients, encounters, diagnoses, and providers, complex JOINs, subqueries, group concatenations, and clinical views.
+                    </p>
+
+                    <!-- Tab Bed for SQL Lab Scripts -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                        <!-- Lab Tabs Header -->
+                        <div class="bg-slate-950 border-b border-slate-800 flex flex-wrap items-center justify-between px-2 pt-2 gap-2 text-xs">
+                            <div class="flex space-x-1 overflow-x-auto" role="tablist">
+                                <button onclick="switchSqlTab('lab1')" id="tab-lab1" class="sql-tab active px-3 py-2 rounded-t-lg font-medium text-slate-200 bg-slate-900 border-t border-x border-slate-800 flex items-center space-x-1.5">
+                                    <i data-lucide="table" class="w-3.5 h-3.5 text-indigo-400"></i>
+                                    <span>Lab 1: Filters & Dist</span>
+                                </button>
+                                <button onclick="switchSqlTab('lab2')" id="tab-lab2" class="sql-tab px-3 py-2 rounded-t-lg font-medium text-slate-400 hover:text-slate-200 flex items-center space-x-1.5">
+                                    <i data-lucide="layers" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                    <span>Lab 2: Aggregations</span>
+                                </button>
+                                <button onclick="switchSqlTab('lab3')" id="tab-lab3" class="sql-tab px-3 py-2 rounded-t-lg font-medium text-slate-400 hover:text-slate-200 flex items-center space-x-1.5">
+                                    <i data-lucide="git-merge" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                    <span>Lab 3: JOINs & Views</span>
+                                </button>
+                                <button onclick="switchSqlTab('lab4')" id="tab-lab4" class="sql-tab px-3 py-2 rounded-t-lg font-medium text-slate-400 hover:text-slate-200 flex items-center space-x-1.5">
+                                    <i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i>
+                                    <span>Lab 4: DDL & Foreign Keys</span>
+                                </button>
+                            </div>
+                            <div class="p-2">
+                                <button onclick="copyCurrentSql()" class="flex items-center space-x-1 text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-800 px-2 py-1 rounded-lg border border-slate-700/60 transition">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                    <span>Copy Tab Code</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content Views -->
+                        <div class="p-4 overflow-x-auto max-h-96 text-xs font-mono">
+                            <!-- Tab 1 -->
+                            <div id="content-lab1" class="sql-content block">
+<pre><code class="language-sql"><span class="token-comment">-- CHIP732_Week06_SQL1_lab1.sql</span>
+<span class="token-comment">-- Patient demographics & Race distribution</span>
+<span class="token-sql-keyword">SELECT</span> patient_race, <span class="token-sql-fn">COUNT</span>(*) <span class="token-sql-keyword">AS</span> CNT
+<span class="token-sql-keyword">FROM</span> patient
+<span class="token-sql-keyword">WHERE</span> 1=1
+<span class="token-sql-keyword">GROUP BY</span> patient_race
+<span class="token-sql-keyword">ORDER BY</span> CNT <span class="token-sql-keyword">DESC</span>;
+
+<span class="token-comment">-- Patient encounters by primary location & department</span>
+<span class="token-sql-keyword">SELECT</span> 
+    <span class="token-sql-keyword">CASE WHEN</span> primary_loc = <span class="token-string">''</span> <span class="token-sql-keyword">THEN</span> <span class="token-string">'UNKNOWN'</span> <span class="token-sql-keyword">ELSE</span> primary_loc <span class="token-sql-keyword">END AS</span> loc,
+    department_name,
+    <span class="token-sql-fn">COUNT</span>(*) <span class="token-sql-keyword">AS</span> total_encounters,
+    <span class="token-sql-fn">COUNT</span>(<span class="token-sql-keyword">DISTINCT</span> random_pat_enc_csn_id) <span class="token-sql-keyword">AS</span> unique_encounters
+<span class="token-sql-keyword">FROM</span> PatientEnc
+<span class="token-sql-keyword">GROUP BY</span> loc, department_name
+<span class="token-sql-keyword">ORDER BY</span> total_encounters <span class="token-sql-keyword">DESC</span>;</code></pre>
+                            </div>
+
+                            <!-- Tab 2 -->
+                            <div id="content-lab2" class="sql-content hidden">
+<pre><code class="language-sql"><span class="token-comment">-- CHIP732_Week06_SQL1_lab2.sql</span>
+<span class="token-comment">-- Concatenate encounters for a specific patient</span>
+<span class="token-sql-keyword">SELECT</span> random_pat_id, <span class="token-sql-fn">GROUP_CONCAT</span>(disp_enc_type) <span class="token-sql-keyword">AS</span> encounter_list
+<span class="token-sql-keyword">FROM</span> patientEnc
+<span class="token-sql-keyword">WHERE</span> random_pat_id = <span class="token-string">'0x01C4ADB0E7AF'</span>
+<span class="token-sql-keyword">GROUP BY</span> random_pat_id;
+
+<span class="token-comment">-- Identify patients with exactly 5 unique diagnosis codes</span>
+<span class="token-sql-keyword">SELECT</span> random_pat_id, random_pat_enc_csn_id,
+       <span class="token-sql-fn">COUNT</span>(*) <span class="token-sql-keyword">AS</span> total_codes,
+       <span class="token-sql-fn">COUNT</span>(<span class="token-sql-keyword">DISTINCT</span> code) <span class="token-sql-keyword">AS</span> unique_codes,
+       <span class="token-sql-fn">GROUP_CONCAT</span>(code) <span class="token-sql-keyword">AS</span> dx_codes
+<span class="token-sql-keyword">FROM</span> allDiagnosis
+<span class="token-sql-keyword">GROUP BY</span> random_pat_id, random_pat_enc_csn_id
+<span class="token-sql-keyword">HAVING</span> unique_codes = 5
+<span class="token-sql-keyword">ORDER BY</span> total_codes <span class="token-sql-keyword">DESC</span>;</code></pre>
+                            </div>
+
+                            <!-- Tab 3 -->
+                            <div id="content-lab3" class="sql-content hidden">
+<pre><code class="language-sql"><span class="token-comment">-- CHIP732_Week06_SQL2_lab3.sql</span>
+<span class="token-comment">-- JOIN Patient & Encounter tables with appt status filter</span>
+<span class="token-sql-keyword">SELECT DISTINCT</span> a.random_pat_id, a.gender
+<span class="token-sql-keyword">FROM</span> patient a
+<span class="token-sql-keyword">LEFT JOIN</span> patientEnc b <span class="token-sql-keyword">ON</span> a.random_pat_id = b.random_pat_id
+<span class="token-sql-keyword">WHERE</span> b.appt_status = <span class="token-string">'Completed'</span>;
+
+<span class="token-comment">-- Nested SQL View calculation for gender percentages</span>
+<span class="token-sql-keyword">DROP VIEW IF EXISTS</span> patient_cnt;
+<span class="token-sql-keyword">CREATE VIEW</span> patient_cnt <span class="token-sql-keyword">AS</span>
+<span class="token-sql-keyword">SELECT</span> gender, <span class="token-sql-fn">COUNT</span>(*) <span class="token-sql-keyword">AS</span> cnt, (<span class="token-sql-keyword">SELECT</span> <span class="token-sql-fn">COUNT</span>(*) <span class="token-sql-keyword">FROM</span> patient) <span class="token-sql-keyword">AS</span> tot
+<span class="token-sql-keyword">FROM</span> patient
+<span class="token-sql-keyword">GROUP BY</span> gender;
+
+<span class="token-sql-keyword">SELECT</span> gender, <span class="token-sql-fn">ROUND</span>(cnt * 1.0 / tot, 4) <span class="token-sql-keyword">AS</span> percentage <span class="token-sql-keyword">FROM</span> patient_cnt;</code></pre>
+                            </div>
+
+                            <!-- Tab 4 -->
+                            <div id="content-lab4" class="sql-content hidden">
+<pre><code class="language-sql"><span class="token-comment">-- CHIP732_Week08_SQL3_lab4.sql</span>
+<span class="token-comment">-- Relational Schema with Foreign Keys & Constraints</span>
+<span class="token-sql-keyword">CREATE TABLE</span> student_course (
+    seq INT <span class="token-sql-keyword">PRIMARY KEY</span>,
+    s_id INT,
+    c_id TEXT,
+    <span class="token-sql-keyword">FOREIGN KEY</span> (s_id) <span class="token-sql-keyword">REFERENCES</span> student (s_id),
+    <span class="token-sql-keyword">FOREIGN KEY</span> (c_id) <span class="token-sql-keyword">REFERENCES</span> course (c_id)
+);
+
+<span class="token-comment">-- Aggregate Left Join across Teachers & Courses</span>
+<span class="token-sql-keyword">SELECT</span> a.t_id, last_name || <span class="token-string">', '</span> || first_name <span class="token-sql-keyword">AS</span> name, <span class="token-sql-fn">COUNT</span>(*) <span class="token-sql-keyword">AS</span> course_count
+<span class="token-sql-keyword">FROM</span> teacher a
+<span class="token-sql-keyword">LEFT JOIN</span> teacher_course b <span class="token-sql-keyword">ON</span> a.t_id = b.t_id
+<span class="token-sql-keyword">GROUP BY</span> a.t_id, name
+<span class="token-sql-keyword">ORDER BY</span> course_count <span class="token-sql-keyword">DESC</span>;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- PROJECT 3: Library of Babel Simulation -->
+            <article class="project-card bg-slate-950/70 border border-slate-800 rounded-2xl overflow-hidden shadow-xl transition hover:border-slate-700" data-category="python" data-tags="Algorithmic,Python,Simulation">
+                <div class="p-6">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                                <i data-lucide="book-open" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-100">Library of Babel Algorithmic Simulation</h3>
+                                <p class="text-xs text-indigo-400 font-mono mt-0.5">library_of_babel_gcarrill.py • Multi-nested Logic</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-indigo-950/80 text-indigo-300 border border-indigo-800/60">5-Level Nested Loop</span>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-300 text-sm leading-relaxed mb-5">
+                        Multi-nested looping structure simulating Jorge Luis Borges' <em>Library of Babel</em> concept. Algorithms systematically construct rooms, bookshelves (5 per room), books (32 per shelf), pages (410 per book), and lines (40 lines of 80 characters each) from a 28-character set.
+                    </p>
+
+                    <!-- Interactive Live Simulation Container -->
+                    <div class="mb-6 bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="terminal" class="w-4 h-4 text-emerald-400"></i>
+                                <span class="text-xs font-semibold text-slate-200">Interactive Page Generator Demo</span>
+                            </div>
+                            <button onclick="generateBabelPage()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium flex items-center space-x-1.5 shadow-md transition">
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                                <span>Generate Sample Page</span>
+                            </button>
+                        </div>
+                        <div id="babel-output" class="bg-slate-950 border border-slate-800/80 p-3 rounded-lg text-[11px] font-mono text-emerald-400/90 leading-tight max-h-44 overflow-y-auto whitespace-pre-wrap select-all">
+Click "Generate Sample Page" to run algorithm logic generating an 80-character x 10-line matrix slice from the Library...
+                        </div>
+                    </div>
+
+                    <!-- Source Viewer -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                        <div class="bg-slate-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between text-xs">
+                            <span class="text-slate-400 font-mono">library_of_babel_gcarrill.py</span>
+                            <button onclick="copyCode('code-babel')" class="flex items-center space-x-1 text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700/60 transition">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span>Copy Code</span>
+                            </button>
+                        </div>
+                        <div class="p-4 overflow-x-auto max-h-60 text-xs font-mono">
+<pre id="code-babel"><code class="language-python"><span class="token-keyword">import</span> random
+
+characters = <span class="token-string">"abcdefghijklmnopqrstuvwxyz. "</span>
+room = []
+
+<span class="token-comment"># 5-Level Nested Loop Architecture</span>
+<span class="token-keyword">for</span> shelf_count <span class="token-keyword">in</span> <span class="token-function">range</span>(<span class="token-number">5</span>):
+    bookshelf = []
+    <span class="token-keyword">for</span> book_count <span class="token-keyword">in</span> <span class="token-function">range</span>(<span class="token-number">32</span>):
+        book = []
+        <span class="token-keyword">for</span> page_count <span class="token-keyword">in</span> <span class="token-function">range</span>(<span class="token-number">410</span>):
+            page = []
+            <span class="token-keyword">for</span> line_count <span class="token-keyword">in</span> <span class="token-function">range</span>(<span class="token-number">40</span>):
+                line = <span class="token-string">""</span>
+                <span class="token-keyword">for</span> char_count <span class="token-keyword">in</span> <span class="token-function">range</span>(<span class="token-number">80</span>):
+                    line += random.choice(characters)
+                page.append(line)
+            book.append(page)
+        bookshelf.append(book)
+    room.append(bookshelf)
+
+<span class="token-keyword">print</span>(room)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- PROJECT 4: Carolina Fight Song & Modular Algorithmic Logic -->
+            <article class="project-card bg-slate-950/70 border border-slate-800 rounded-2xl overflow-hidden shadow-xl transition hover:border-slate-700" data-category="python" data-tags="Algorithmic,Python,Modular Math">
+                <div class="p-6">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                                <i data-lucide="music" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-100">Carolina Fight Song & Algorithmic Control Flow</h3>
+                                <p class="text-xs text-indigo-400 font-mono mt-0.5">fight_song_731059404.py • Control Flow Optimization</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-800 text-slate-300">Modulo Arithmetic</span>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-300 text-sm leading-relaxed mb-5">
+                        Python control flow and modular arithmetic demonstration. Evaluates range indices 1 to 100 to map modulo divisors (3, 5, 15) to custom chant responses (<code class="text-indigo-300 bg-slate-900 px-1 py-0.5 rounded">TAR!</code>, <code class="text-indigo-300 bg-slate-900 px-1 py-0.5 rounded">HEELS!</code>, <code class="text-amber-300 bg-slate-900 px-1 py-0.5 rounded">TAR HEELS!</code>).
+                    </p>
+
+                    <!-- Code & Interactive Runner Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <!-- Code Box -->
+                        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                            <div class="bg-slate-950 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between text-xs">
+                                <span class="text-slate-400 font-mono">fight_song_731059404.py</span>
+                                <button onclick="copyCode('code-fightsong')" class="text-slate-400 hover:text-white">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                            <div class="p-3 overflow-x-auto max-h-52 text-xs font-mono">
+<pre id="code-fightsong"><code class="language-python"><span class="token-keyword">print</span>(<span class="token-string">"The new Carolina fight song:"</span>)
+
+<span class="token-keyword">for</span> i <span class="token-keyword">in</span> <span class="token-function">range</span>(<span class="token-number">1</span>, <span class="token-number">101</span>):
+    <span class="token-keyword">if</span> i % <span class="token-number">15</span> == <span class="token-number">0</span>:
+        <span class="token-keyword">print</span>(<span class="token-string">"TAR HEELS!"</span>)
+    <span class="token-keyword">elif</span> i % <span class="token-number">3</span> == <span class="token-number">0</span>:
+        <span class="token-keyword">print</span>(<span class="token-string">"TAR!"</span>)
+    <span class="token-keyword">elif</span> i % <span class="token-number">5</span> == <span class="token-number">0</span>:
+        <span class="token-keyword">print</span>(<span class="token-string">"HEELS!"</span>)
+    <span class="token-keyword">else</span>:
+        <span class="token-keyword">print</span>(f<span class="token-string">"{i}!"</span>)</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Mini Output Window -->
+                        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-semibold text-slate-300">Run Control Flow Test</span>
+                                    <button onclick="runFightSongDemo()" class="px-2.5 py-1 rounded bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 text-xs hover:bg-emerald-600/30 transition">
+                                        Execute Output
+                                    </button>
+                                </div>
+                                <div id="fightsong-output" class="bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-xs font-mono text-cyan-300/90 h-36 overflow-y-auto whitespace-pre">
+Click 'Execute Output' to run loop evaluation...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+        <!-- No Results Fallback -->
+        <div id="no-results" class="hidden text-center py-16 bg-slate-950/40 border border-slate-800 rounded-2xl">
+            <i data-lucide="search-x" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
+            <h3 class="text-base font-medium text-slate-300">No matching projects found</h3>
+            <p class="text-xs text-slate-500 mt-1">Try resetting search filters or keywords.</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-medium hover:bg-indigo-500 transition">
+                Reset All Filters
+            </button>
+        </div>
+
+    </main>
+
+    <!-- JavaScript Application Logic -->
     <script>
-        function switchCourse(repoName, element) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
-            
-            document.querySelectorAll('.lab-list').forEach(list => list.classList.remove('active'));
-            document.getElementById(`menu-${repoName}`).classList.add('active');
-            
-            document.getElementById('sidebar-title').innerText = `${repoName} Scripts`;
-            document.getElementById('active-status').innerText = `Active Repo: ${repoName}`;
-            
-            // Revert interface view focus when context toggles
-            document.getElementById('active-title').innerText = "Select an Assignment File";
-            document.querySelectorAll('.gist-wrapper').forEach(wrapper => wrapper.classList.remove('active'));
-            document.getElementById('welcome-message').style.display = 'flex';
-            document.querySelectorAll('.lab-item').forEach(item => item.classList.remove('active'));
+        // Initialize Lucide Icons
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            updateCategoryCounts();
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+
+        // Current active SQL Tab
+        let activeSqlTabId = 'lab1';
+
+        function switchSqlTab(labId) {
+            activeSqlTabId = labId;
+            // Update tab styles
+            document.querySelectorAll('.sql-tab').forEach(tab => {
+                tab.classList.remove('active', 'text-slate-200', 'bg-slate-900', 'border-t', 'border-x', 'border-slate-800');
+                tab.classList.add('text-slate-400');
+            });
+            const activeTab = document.getElementById(`tab-${labId}`);
+            activeTab.classList.add('active', 'text-slate-200', 'bg-slate-900', 'border-t', 'border-x', 'border-slate-800');
+            activeTab.classList.remove('text-slate-400');
+
+            // Hide all tab contents
+            document.querySelectorAll('.sql-content').forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('block');
+            });
+            // Show active content
+            const activeContent = document.getElementById(`content-${labId}`);
+            activeContent.classList.remove('hidden');
+            activeContent.classList.add('block');
         }
 
-        function viewGistFile(repoKey, fileTargetId, displayTitle, element) {
-            document.querySelectorAll('.lab-item').forEach(item => item.classList.remove('active'));
-            element.classList.add('active');
-            
-            document.getElementById('welcome-message').style.display = 'none';
-            document.getElementById('active-title').innerText = displayTitle;
+        function copyCurrentSql() {
+            const activeContent = document.getElementById(`content-${activeSqlTabId}`);
+            if (activeContent) {
+                const textToCopy = activeContent.textContent.trim();
+                copyToClipboard(textToCopy, `SQL Tab Code Copied!`);
+            }
+        }
 
-            // Mount the active programmatic collection view container
-            document.querySelectorAll('.gist-wrapper').forEach(wrapper => wrapper.classList.remove('active'));
-            document.getElementById(`gist-container-${repoKey}`).classList.add('active');
-            
-            // Isolate visibility tracking layout down explicitly to the targeted subfile box frame item
-            document.querySelectorAll(`#gist-container-${repoKey} .gist-file`).forEach(fileBox => {
-                if (fileBox.classList.contains(fileTargetId)) {
-                    fileBox.style.display = 'block';
+        // Generic Code Copier
+        function copyCode(elementId) {
+            const codeElem = document.getElementById(elementId);
+            if (codeElem) {
+                copyToClipboard(codeElem.textContent.trim(), 'Code snippet copied to clipboard!');
+            }
+        }
+
+        function copyToClipboard(text, message) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast(message);
+            } catch (err) {
+                showToast('Failed to copy code.');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Interactive Babel Simulation
+        function generateBabelPage() {
+            const chars = "abcdefghijklmnopqrstuvwxyz. ";
+            let outputLines = ["--- LIBRARY OF BABEL [ROOM 1, SHELF 1, BOOK 1, PAGE 1] ---"];
+            for (let l = 0; l < 10; l++) {
+                let line = "";
+                for (let c = 0; c < 75; c++) {
+                    line += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                outputLines.push(`[L${l+1 < 10 ? '0' + (l+1) : l+1}] ` + line);
+            }
+            outputLines.push("... [30 remaining lines omitted for live preview] ...");
+            document.getElementById('babel-output').textContent = outputLines.join('\n');
+            showToast('Sample Library of Babel Page Generated!');
+        }
+
+        // Fight Song Code Simulator
+        function runFightSongDemo() {
+            let res = ["The new Carolina fight song:"];
+            for (let i = 1; i <= 20; i++) {
+                if (i % 15 === 0) res.push(`${i}: TAR HEELS!`);
+                else if (i % 3 === 0) res.push(`${i}: TAR!`);
+                else if (i % 5 === 0) res.push(`${i}: HEELS!`);
+                else res.push(`${i}!`);
+            }
+            res.push("... [Output truncated to 20 iterations for live view] ...");
+            document.getElementById('fightsong-output').textContent = res.join('\n');
+        }
+
+        // Filtering and Search Logic
+        let activeCategory = 'all';
+        let activeTag = null;
+
+        function filterCategory(cat) {
+            activeCategory = cat;
+            activeTag = null;
+            updateCategoryButtons();
+            applyFilters();
+        }
+
+        function toggleTagFilter(tag) {
+            if (activeTag === tag) {
+                activeTag = null;
+            } else {
+                activeTag = tag;
+            }
+            applyFilters();
+        }
+
+        function updateCategoryButtons() {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600/10', 'text-indigo-400', 'border-indigo-500/30');
+                btn.classList.add('text-slate-400', 'border-transparent');
+            });
+            const activeBtn = document.getElementById(`cat-btn-${activeCategory}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-indigo-600/10', 'text-indigo-400', 'border-indigo-500/30');
+                activeBtn.classList.remove('text-slate-400', 'border-transparent');
+            }
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const projects = document.querySelectorAll('.project-card');
+            let visibleCount = 0;
+
+            projects.forEach(project => {
+                const category = project.getAttribute('data-category');
+                const tags = project.getAttribute('data-tags') || '';
+                const text = project.textContent.toLowerCase();
+
+                const matchesCat = activeCategory === 'all' || category === activeCategory;
+                const matchesTag = !activeTag || tags.includes(activeTag);
+                const matchesSearch = !query || text.includes(query);
+
+                if (matchesCat && matchesTag && matchesSearch) {
+                    project.classList.remove('hidden');
+                    visibleCount++;
                 } else {
-                    fileBox.style.display = 'none';
+                    project.classList.add('hidden');
                 }
             });
+
+            // Update filter indicator
+            const filterIndicator = document.getElementById('filter-indicator');
+            const filterLabel = document.getElementById('filter-label');
+            if (activeCategory !== 'all' || activeTag || query) {
+                filterIndicator.classList.remove('hidden');
+                let parts = [];
+                if (activeCategory !== 'all') parts.push(`Category: ${activeCategory.toUpperCase()}`);
+                if (activeTag) parts.push(`Tag: #${activeTag}`);
+                if (query) parts.push(`Search: "${query}"`);
+                filterLabel.textContent = parts.join(' | ');
+            } else {
+                filterIndicator.classList.add('hidden');
+            }
+
+            // Show fallback if 0 projects match
+            const noResults = document.getElementById('no-results');
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
         }
+
+        function resetFilters() {
+            activeCategory = 'all';
+            activeTag = null;
+            document.getElementById('search-input').value = '';
+            document.getElementById('clear-search').classList.add('hidden');
+            updateCategoryButtons();
+            applyFilters();
+        }
+
+        function updateCategoryCounts() {
+            const total = document.querySelectorAll('.project-card').length;
+            const sqlCount = document.querySelectorAll('.project-card[data-category="sql"]').length;
+            const pythonCount = document.querySelectorAll('.project-card[data-category="python"]').length;
+
+            document.getElementById('count-all').textContent = total;
+            document.getElementById('count-sql').textContent = sqlCount;
+            document.getElementById('count-python').textContent = pythonCount;
+        }
+
+        // Live Search Input Event Listeners
+        const searchInput = document.getElementById('search-input');
+        const clearSearchBtn = document.getElementById('clear-search');
+
+        searchInput.addEventListener('input', (e) => {
+            if (e.target.value) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+            applyFilters();
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearSearchBtn.classList.add('hidden');
+            applyFilters();
+        });
     </script>
 </body>
 </html>
