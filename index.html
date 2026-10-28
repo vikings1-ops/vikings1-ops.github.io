@@ -1,8 +1,58 @@
-<!-- Sidebar Menu -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Informatics Technical Portfolio</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f6f9; color: #333; line-height: 1.6; }
+        header { background: #1e293b; color: white; padding: 2rem 5% 1rem 5%; text-align: left; }
+        header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+        header p { color: #94a3b8; font-size: 1rem; margin-bottom: 1.5rem; }
+        
+        .tabs { display: flex; gap: 1rem; border-bottom: 1px solid #334155; }
+        .tab-btn { background: #334155; color: #94a3b8; border: none; padding: 0.75rem 1.5rem; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: all 0.2s ease; }
+        .tab-btn:hover { background: #475569; color: white; }
+        .tab-btn.active { background: #3b82f6; color: white; }
+
+        .container { display: flex; max-width: 1400px; margin: 2rem auto; padding: 0 2%; gap: 2rem; }
+        .sidebar { flex: 1; min-width: 320px; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); height: fit-content; }
+        .sidebar h2 { font-size: 1.2rem; margin-bottom: 1rem; color: #0f172a; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; }
+        .lab-list { list-style: none; display: none; }
+        .lab-list.active { display: block; }
+        .lab-item { padding: 0.75rem 1rem; margin-bottom: 0.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: #475569; transition: all 0.2s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lab-item:hover { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+        .lab-item.active { background: #3b82f6; color: white; border-color: #2563eb; }
+        
+        .workspace { flex: 2.5; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); display: flex; flex-direction: column; min-height: 550px; }
+        .workspace-header { margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem; }
+        .workspace-header h2 { color: #0f172a; font-size: 1.3rem; }
+        .status-tag { display: inline-block; background: #dbeafe; color: #1e40af; font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
+        
+        .code-container { flex: 1; position: relative; background: #0f172a; border-radius: 6px; overflow: hidden; border: 1px solid #1e293b; }
+        pre { margin: 0; padding: 1.25rem; overflow: auto; max-height: 550px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.9rem; color: #e2e8f0; white-space: pre-wrap; word-break: break-all; }
+        .loading { display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-style: italic; padding: 2rem 0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Health Informatics Technical Portfolio</h1>
+        <p>Live implementation scripts spanning healthcare data application pipelines and database operations.</p>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchCourse('CHIP-732', this)">SQL Database Systems (CHIP-732)</button>
+            <button class="tab-btn" onclick="switchCourse('CHIP-705', this)">Python for Healthcare (CHIP-705)</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar Menu -->
         <div class="sidebar">
             <h2 id="sidebar-title">CHIP-732 Scripts</h2>
             
-            <!-- SQL Files List (Matches your exact capitalization perfectly) -->
+            <!-- SQL Files List (Matches your exact repository filenames and case tracking perfectly) -->
             <ul id="menu-CHIP-732" class="lab-list active">
                 <li class="lab-item" onclick="fetchRawCode('CHIP-732', 'CHIP732_Week06_SQL1_lab1.sql', this)">📄 Week 06 - SQL Lab 1</li>
                 <li class="lab-item" onclick="fetchRawCode('CHIP-732', 'CHIP732_Week06_SQL1_lab2.sql', this)">📄 Week 06 - SQL Lab 2</li>
@@ -10,7 +60,7 @@
                 <li class="lab-item" onclick="fetchRawCode('CHIP-732', 'CHIP732_Week08_SQL3_lab4.sql', this)">📄 Week 08 - SQL Lab 4</li>
             </ul>
 
-            <!-- Python Files List (Matches your lowercase filenames perfectly) -->
+            <!-- Python Files List (Matches your lowercase filenames and underscores perfectly) -->
             <ul id="menu-CHIP-705" class="lab-list">
                 <li class="lab-item" onclick="fetchRawCode('CHIP-705', 'bagel_count_731059404.py', this)">🐍 bagel_count_731059404.py</li>
                 <li class="lab-item" onclick="fetchRawCode('CHIP-705', 'fight_song_731059404.py', this)">🐍 fight_song_731059404.py</li>
@@ -18,3 +68,56 @@
                 <li class="lab-item" onclick="fetchRawCode('CHIP-705', 'library_of_babel_gcarrill.py', this)">🐍 library_of_babel_gcarrill.py</li>
             </ul>
         </div>
+
+        <!-- Workspace Code Viewer -->
+        <div class="workspace">
+            <div class="workspace-header">
+                <h2 id="active-title">Select an Assignment File</h2>
+                <span id="active-status" class="status-tag">Active Repo: CHIP-732</span>
+            </div>
+            <div class="code-container">
+                <pre id="code-block"><div class="loading">Click a script from the sidebar list to retrieve and view the code directly from your repository.</div></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const USERNAME = 'vikings1-ops';
+
+        function switchCourse(repoName, element) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            
+            document.querySelectorAll('.lab-list').forEach(list => list.classList.remove('active'));
+            document.getElementById(`menu-${repoName}`).classList.add('active');
+            
+            document.getElementById('sidebar-title').innerText = `${repoName} Scripts`;
+            document.getElementById('active-status').innerText = `Active Repo: ${repoName}`;
+            
+            document.getElementById('active-title').innerText = "Select an Assignment File";
+            document.getElementById('code-block').innerHTML = `<div class="loading">Click a script from the sidebar list to retrieve and view the code directly from your repository.</div>`;
+        }
+
+        async function fetchRawCode(repoName, fileName, element) {
+            document.querySelectorAll('.lab-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+
+            const codeBlock = document.getElementById('code-block');
+            document.getElementById('active-title').innerText = fileName;
+            
+            codeBlock.innerHTML = `<div class="loading">Fetching file contents directly from ${repoName}...</div>`;
+
+            try {
+                // Connects directly to the raw text delivery path on the main branch
+                const response = await fetch(`https://githubusercontent.com{USERNAME}/${repoName}/main/${fileName}`);
+                if (!response.ok) throw new Error('File not found');
+                
+                const text = await response.text();
+                codeBlock.textContent = text;
+            } catch (error) {
+                codeBlock.innerHTML = `<div class="loading" style="color:#ef4444;">Could not view code content. Make sure the file name is spelled exactly right in your repository main branch.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
