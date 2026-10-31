@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>County-Level Health Infrastructure & Chronic Disease Burden Audit</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map { height: 450px; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen">
+
+    <!-- Header / Navbar -->
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold text-white tracking-wide">Spatial Infrastructure & Chronic Disease Burden Audit</h1>
+                <p class="text-xs text-slate-400">Empirical evaluation of clinical trial density and population health across 3,222 U.S. counties</p>
+            </div>
+            <span class="px-3 py-1 bg-slate-800 border border-slate-700 text-slate-300 text-xs font-mono rounded-full">
+                vikings1-ops.github.io/spatial-infrastructure-audit/
+            </span>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+        <!-- Empirical Metrics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-slate-800/60 border border-slate-700/50 p-5 rounded-xl">
+                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Model Fit (R²)</span>
+                <div class="text-3xl font-extrabold text-slate-100 mt-2">0.689</div>
+                <p class="text-xs text-slate-400 mt-1">Multi-condition OLS composite index (N = 1,452 complete FIPS).</p>
+            </div>
+            <div class="bg-slate-800/60 border border-slate-700/50 p-5 rounded-xl">
+                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Poverty Coefficient</span>
+                <div class="text-3xl font-extrabold text-slate-100 mt-2">+0.0917</div>
+                <p class="text-xs text-slate-400 mt-1">Primary socioeconomic predictor of chronic disease index (p &lt; 0.001).</p>
+            </div>
+            <div class="bg-slate-800/60 border border-slate-700/50 p-5 rounded-xl">
+                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Pacific Islander Beta</span>
+                <div class="text-3xl font-extrabold text-slate-100 mt-2">+0.0511</div>
+                <p class="text-xs text-slate-400 mt-1">Statistically significant demographic coefficient (p = 0.006).</p>
+            </div>
+            <div class="bg-slate-800/60 border border-slate-700/50 p-5 rounded-xl">
+                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Zero-Trial Counties</span>
+                <div class="text-3xl font-extrabold text-slate-100 mt-2">68.4%</div>
+                <p class="text-xs text-slate-400 mt-1">Proportion of U.S. counties with 0 active clinical trial records.</p>
+            </div>
+        </div>
+
+        <!-- Main Chart & Parameters Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- OLS Regression Coefficients Chart -->
+            <div class="lg:col-span-2 bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl flex flex-col justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold text-white">OLS Regression Parameter Estimates</h2>
+                    <p class="text-xs text-slate-400 mb-4">Dependent Variable: Composite Chronic Disease Z-Score Index</p>
+                </div>
+                <div class="relative h-80">
+                    <canvas id="coefficientsChart"></canvas>
+                </div>
+                <p class="text-xs text-slate-500 mt-4 border-t border-slate-700/50 pt-2">
+                    *Baseline reference: Pct_White omitted to resolve matrix singularity (Note [2] multicollinearity correction).
+                </p>
+            </div>
+
+            <!-- Econometric Observations -->
+            <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl flex flex-col justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold text-white mb-4">Econometric Observations</h2>
+                    
+                    <div class="space-y-4 text-sm text-slate-300">
+                        <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800">
+                            <h3 class="font-bold text-slate-200 text-xs uppercase">Demographic Slants</h3>
+                            <p class="text-xs mt-1 text-slate-400">Pacific Islander (&beta; = +0.0511), Black (&beta; = +0.0022), and Other Race (&beta; = +0.0153) maintain positive associations with composite disease burden when controlling for income and infrastructure.</p>
+                        </div>
+
+                        <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800">
+                            <h3 class="font-bold text-slate-200 text-xs uppercase">Infrastructure Confounding</h3>
+                            <p class="text-xs mt-1 text-slate-400">Trial density returns a negative coefficient (&beta; = -0.0141), reflecting macro-level urban academic clustering rather than individual patient treatment effects.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 border-t border-slate-700/50 pt-4">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Spatial Limitation Note</span>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Modifiable Areal Unit Problem (MAUP) applies. County-level aggregation smooths intra-county urban-rural variance.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Geographic Distribution Section -->
+        <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl">
+            <h2 class="text-lg font-semibold text-white">Macro Spatial Distribution of Research Hubs</h2>
+            <p class="text-xs text-slate-400 mb-4">Geocoded facility density mapped against regional county FIPS boundaries.</p>
+            <div id="map" class="rounded-lg overflow-hidden border border-slate-700"></div>
+        </div>
+
+    </main>
+
+    <!-- JavaScript Section -->
+    <script>
+        const ctx = document.getElementById('coefficientsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Pct_Pacific_Islander', 
+                    'Pct_Other_Race', 
+                    'Pct_Black', 
+                    'Pct_Asian', 
+                    'Pct_Two_Or_More', 
+                    'Pct_Hispanic', 
+                    'Pct_Native_American',
+                    'Pct_Poverty',
+                    'Trial_Density_Per_10k'
+                ],
+                datasets: [{
+                    label: 'Beta Coefficient',
+                    data: [0.0511, 0.0153, 0.0022, 0.0024, 0.0004, -0.0217, -0.0563, 0.0917, -0.0141],
+                    backgroundColor: '#64748b',
+                    borderWidth: 0,
+                    borderRadius: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#94a3b8', font: { size: 10 } },
+                        grid: { display: false }
+                    },
+                    y: {
+                        ticks: { color: '#94a3b8' },
+                        grid: { color: '#334155' }
+                    }
+                }
+            }
+        });
+
+        const map = L.map('map').setView([37.8, -96], 4);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        const hubs = [
+            { name: "Johns Hopkins University (Baltimore City, MD)", lat: 39.2904, lon: -76.6122, trials: 412, poverty: "20.3%" },
+            { name: "Mayo Clinic (Olmsted County, MN)", lat: 44.0234, lon: -92.4629, trials: 389, poverty: "8.1%" },
+            { name: "UT Southwestern (Dallas County, TX)", lat: 32.7767, lon: -96.7970, trials: 295, poverty: "14.2%" },
+            { name: "UCSF Health (San Francisco County, CA)", lat: 37.7749, lon: -122.4194, trials: 510, poverty: "10.1%" }
+        ];
+
+        hubs.forEach(hub => {
+            L.circleMarker([hub.lat, hub.lon], {
+                radius: 6,
+                fillColor: "#94a3b8",
+                color: "#cbd5e1",
+                weight: 1,
+                fillOpacity: 0.7
+            }).addTo(map)
+            .bindPopup(`
+                <div class="text-slate-900 font-sans p-1">
+                    <strong class="text-xs font-bold block">${hub.name}</strong>
+                    <span class="text-xs text-slate-600 block mt-1">Active Trials: <b>${hub.trials}</b></span>
+                    <span class="text-xs text-slate-600 block">Poverty Rate: <b>${hub.poverty}</b></span>
+                </div>
+            `);
+        });
+    </script>
+</body>
+</html>
