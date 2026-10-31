@@ -3,21 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>County-Level Health Infrastructure & Chronic Disease Burden Audit</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Spatial Infrastructure & Chronic Disease Burden Audit</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Leaflet CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <style>
-        #map { height: 450px; }
-    </style>
+    <style> #map { height: 500px; background-color: #1e293b; } </style>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen">
 
-    <!-- Header / Navbar -->
     <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div>
@@ -58,8 +52,6 @@
 
         <!-- Main Chart & Parameters Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-            <!-- OLS Regression Coefficients Chart -->
             <div class="lg:col-span-2 bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl flex flex-col justify-between">
                 <div>
                     <h2 class="text-lg font-semibold text-white">OLS Regression Parameter Estimates</h2>
@@ -73,24 +65,20 @@
                 </p>
             </div>
 
-            <!-- Econometric Observations -->
             <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl flex flex-col justify-between">
                 <div>
                     <h2 class="text-lg font-semibold text-white mb-4">Econometric Observations</h2>
-                    
                     <div class="space-y-4 text-sm text-slate-300">
                         <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800">
                             <h3 class="font-bold text-slate-200 text-xs uppercase">Demographic Slants</h3>
                             <p class="text-xs mt-1 text-slate-400">Pacific Islander (&beta; = +0.0511), Black (&beta; = +0.0022), and Other Race (&beta; = +0.0153) maintain positive associations with composite disease burden when controlling for income and infrastructure.</p>
                         </div>
-
                         <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800">
                             <h3 class="font-bold text-slate-200 text-xs uppercase">Infrastructure Confounding</h3>
                             <p class="text-xs mt-1 text-slate-400">Trial density returns a negative coefficient (&beta; = -0.0141), reflecting macro-level urban academic clustering rather than individual patient treatment effects.</p>
                         </div>
                     </div>
                 </div>
-
                 <div class="mt-6 border-t border-slate-700/50 pt-4">
                     <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Spatial Limitation Note</span>
                     <p class="text-xs text-slate-500 leading-relaxed">
@@ -98,34 +86,33 @@
                     </p>
                 </div>
             </div>
-
         </div>
 
-        <!-- Geographic Distribution Section -->
-        <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl">
-            <h2 class="text-lg font-semibold text-white">Macro Spatial Distribution of Research Hubs</h2>
-            <p class="text-xs text-slate-400 mb-4">Geocoded facility density mapped against regional county FIPS boundaries.</p>
+        <!-- Geographic Distribution & Proximity Disconnect Section -->
+        <div class="bg-slate-800/40 border border-slate-700/50 p-6 rounded-xl space-y-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-lg font-semibold text-white">Spatial Mismatch: Research Hubs vs. County Burden Deserts</h2>
+                    <p class="text-xs text-slate-400">Geocoded facility density contrasted against regional demographic and disease gradients.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="filterHubs('all')" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-xs font-medium rounded text-white transition">All Hubs</button>
+                    <button onclick="filterHubs('high-burden')" class="px-3 py-1 bg-rose-600 hover:bg-rose-500 text-xs font-medium rounded text-white transition">Highlight High Disparity Corridors</button>
+                </div>
+            </div>
             <div id="map" class="rounded-lg overflow-hidden border border-slate-700"></div>
         </div>
 
     </main>
 
-    <!-- JavaScript Section -->
     <script>
         const ctx = document.getElementById('coefficientsChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: [
-                    'Pct_Pacific_Islander', 
-                    'Pct_Other_Race', 
-                    'Pct_Black', 
-                    'Pct_Asian', 
-                    'Pct_Two_Or_More', 
-                    'Pct_Hispanic', 
-                    'Pct_Native_American',
-                    'Pct_Poverty',
-                    'Trial_Density_Per_10k'
+                    'Pct_Pacific_Islander', 'Pct_Other_Race', 'Pct_Black', 'Pct_Asian', 
+                    'Pct_Two_Or_More', 'Pct_Hispanic', 'Pct_Native_American', 'Pct_Poverty', 'Trial_Density_Per_10k'
                 ],
                 datasets: [{
                     label: 'Beta Coefficient',
@@ -138,51 +125,62 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
+                plugins: { legend: { display: false } },
                 scales: {
-                    x: {
-                        ticks: { color: '#94a3b8', font: { size: 10 } },
-                        grid: { display: false }
-                    },
-                    y: {
-                        ticks: { color: '#94a3b8' },
-                        grid: { color: '#334155' }
-                    }
+                    x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } },
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
                 }
             }
         });
 
+        // OpenStreetMap Tile Layer
         const map = L.map('map').setView([37.8, -96], 4);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors',
             maxZoom: 19
         }).addTo(map);
 
         const hubs = [
-            { name: "Johns Hopkins University (Baltimore City, MD)", lat: 39.2904, lon: -76.6122, trials: 412, poverty: "20.3%" },
-            { name: "Mayo Clinic (Olmsted County, MN)", lat: 44.0234, lon: -92.4629, trials: 389, poverty: "8.1%" },
-            { name: "UT Southwestern (Dallas County, TX)", lat: 32.7767, lon: -96.7970, trials: 295, poverty: "14.2%" },
-            { name: "UCSF Health (San Francisco County, CA)", lat: 37.7749, lon: -122.4194, trials: 510, poverty: "10.1%" }
+            { name: "Johns Hopkins University (Baltimore City, MD)", lat: 39.2904, lon: -76.6122, trials: 412, poverty: "20.3%", disparity: "High Minority / High Burden" },
+            { name: "Mayo Clinic (Olmsted County, MN)", lat: 44.0234, lon: -92.4629, trials: 389, poverty: "8.1%", disparity: "Low Burden Baseline" },
+            { name: "UT Southwestern (Dallas County, TX)", lat: 32.7767, lon: -96.7970, trials: 295, poverty: "14.2%", disparity: "High Minority / High Burden" },
+            { name: "UCSF Health (San Francisco County, CA)", lat: 37.7749, lon: -122.4194, trials: 510, poverty: "10.1%", disparity: "Urban Core" }
         ];
 
-        hubs.forEach(hub => {
-            L.circleMarker([hub.lat, hub.lon], {
-                radius: 6,
-                fillColor: "#94a3b8",
-                color: "#cbd5e1",
-                weight: 1,
-                fillOpacity: 0.7
-            }).addTo(map)
-            .bindPopup(`
-                <div class="text-slate-900 font-sans p-1">
-                    <strong class="text-xs font-bold block">${hub.name}</strong>
-                    <span class="text-xs text-slate-600 block mt-1">Active Trials: <b>${hub.trials}</b></span>
-                    <span class="text-xs text-slate-600 block">Poverty Rate: <b>${hub.poverty}</b></span>
-                </div>
-            `);
-        });
+        let markers = [];
+
+        function renderMarkers(filterType) {
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+
+            hubs.forEach(hub => {
+                if (filterType === 'high-burden' && hub.disparity !== "High Minority / High Burden") return;
+
+                let color = hub.disparity === "High Minority / High Burden" ? "#f43f5e" : "#3b82f6";
+                let marker = L.circleMarker([hub.lat, hub.lon], {
+                    radius: 8,
+                    fillColor: color,
+                    color: "#ffffff",
+                    weight: 1.5,
+                    fillOpacity: 0.9
+                }).addTo(map)
+                .bindPopup(`
+                    <div class="text-slate-900 font-sans p-1">
+                        <strong class="text-xs font-bold block">${hub.name}</strong>
+                        <span class="text-xs text-slate-600 block mt-1">Active Trials: <b>${hub.trials}</b></span>
+                        <span class="text-xs text-slate-600 block">Poverty Rate: <b>${hub.poverty}</b></span>
+                        <span class="text-xs text-rose-600 font-semibold block mt-1">Classification: ${hub.disparity}</span>
+                    </div>
+                `);
+                markers.push(marker);
+            });
+        }
+
+        renderMarkers('all');
+
+        function filterHubs(type) {
+            renderMarkers(type);
+        }
     </script>
 </body>
 </html>
